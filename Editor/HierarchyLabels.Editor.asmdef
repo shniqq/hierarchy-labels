@@ -1,0 +1,19 @@
+{
+    "name": "HierarchyLabels.Runtime",
+    "rootNamespace": "HierarchyLabels",
+    "references": [
+        "Textus.SerializeReferenceUI",
+        "NaughtyAttributes.Core"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
