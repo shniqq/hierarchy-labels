@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace HierarchyLabels
 {
-    [FilePath("ProjectSettings/Hierarchy Labels/Settings.asset", FilePathAttribute.Location.ProjectFolder)]
+    [FilePath(HierarchyLabelsSettingsAssetPath, FilePathAttribute.Location.ProjectFolder)]
     internal class HierarchyLabelsSettings : ScriptableSingleton<HierarchyLabelsSettings>
     {
-        private const string HierarchyLabelsSettingsAssetPath = "Assets/Hierarchy Labels Settings.asset";
+        private const string HierarchyLabelsSettingsAssetPath = "ProjectSettings/Hierarchy Labels Settings.asset";
 
         public bool Enabled
         {
@@ -43,17 +43,21 @@ namespace HierarchyLabels
             instance.Enabled = !instance.Enabled;
         }
 
-        [InitializeOnLoadMethod]
-        private static void Init()
+        private static Editor GetOrCreateEditor()
         {
-            _editor = Editor.CreateEditor(instance);
+            if (_editor == null)
+            {
+                _editor = Editor.CreateEditor(instance);
+            }
+
+            return _editor;
         }
 
         public static void DrawSettings()
         {
             instance.hideFlags = HideFlags.None;
 
-            _editor.OnInspectorGUI();
+            GetOrCreateEditor().OnInspectorGUI();
 
             foreach (var type in TypeCache.GetTypesDerivedFrom<IHierarchyLabelRule>()
                          .Where(e => e.IsClass)
