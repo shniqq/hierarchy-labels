@@ -104,17 +104,24 @@ namespace HierarchyLabels
             var hierarchyRulesSerializedProperty = _serializedObject.FindProperty(nameof(_hierarchyLabelRules));
             var hierarchyRulesEnumerator = hierarchyRulesSerializedProperty.GetEnumerator();
 
-            if (hierarchyRulesSerializedProperty.arraySize == 0)
+            if (hierarchyRulesEnumerator.Current == null || hierarchyRulesSerializedProperty.arraySize == 0)
             {
                 EditorGUILayout.LabelField("No rules added yet..");
             }
 
             var index = 0;
-            while (hierarchyRulesEnumerator.MoveNext())
+            while (hierarchyRulesEnumerator.MoveNext() && hierarchyRulesEnumerator.Current != null)
             {
                 EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
                 EditorGUILayout.BeginVertical();
                 var currentHierarchyLabelRule = (SerializedProperty)hierarchyRulesEnumerator.Current;
+
+                if (currentHierarchyLabelRule.managedReferenceValue == null)
+                {
+                    hierarchyRulesSerializedProperty.DeleteArrayElementAtIndex(index);
+                    break;
+                }
+                
                 var hierarchyRuleType = currentHierarchyLabelRule.managedReferenceValue.GetType();
                 var displayName = hierarchyRuleType
                     .GetCustomAttribute<DisplayNameAttribute>() is { } displayNameAttribute
