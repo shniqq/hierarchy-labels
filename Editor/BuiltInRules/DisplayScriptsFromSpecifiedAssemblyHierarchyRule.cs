@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using Component = UnityEngine.Component;
 
-namespace HierarchyLabels.Rules
+namespace HierarchyLabels.BuiltInRules
 {
     [Serializable, DisplayName("Is From Assembly"),
      Description("Displays a label if the component script is from the specified assembly.")]

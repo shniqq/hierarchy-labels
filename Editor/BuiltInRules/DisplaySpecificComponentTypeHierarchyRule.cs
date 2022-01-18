@@ -3,7 +3,7 @@ using System.ComponentModel;
 using UnityEngine;
 using Component = UnityEngine.Component;
 
-namespace HierarchyLabels.Rules
+namespace HierarchyLabels.BuiltInRules
 {
     [Serializable, DisplayName("Is Type"), Description("Displays a label if the component script is of the specified type.")]
     internal class DisplaySpecificComponentTypeHierarchyRule : HierarchyLabelRule
