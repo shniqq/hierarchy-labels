@@ -26,8 +26,8 @@ namespace HierarchyLabels
             if (gameObject != null)
             {
                 selectionRect.x += HierarchyLabelsSettings.instance.StyleProvider.GetStyle().CalcSize(new GUIContent(gameObject.name)).x +
-                                   HierarchyLabelsSettings.instance.Spacing.x;
-                selectionRect.y += HierarchyLabelsSettings.instance.Spacing.y;
+                                   HierarchyLabelsSettings.instance.Alignment.x;
+                selectionRect.y += HierarchyLabelsSettings.instance.Alignment.y;
 
                 ApplyLabel(selectionRect, GetLabel(gameObject));
             }
