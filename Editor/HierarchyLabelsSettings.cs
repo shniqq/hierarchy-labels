@@ -65,7 +65,7 @@ namespace HierarchyLabels
 
         public static void DrawSettings()
         {
-            _serializedObject ??= new SerializedObject(instance);
+            _serializedObject = new SerializedObject(instance);
             _serializedObject.UpdateIfRequiredOrScript();
 
             EditorGUI.BeginChangeCheck();
