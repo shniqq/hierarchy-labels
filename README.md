@@ -5,16 +5,16 @@ Custom labels for the Unity Hierarchy window:
 ![Example image of hierarchy labels](Documentation~/HierarchyExample.png)
 
 - [Hierarchy Labels](#hierarchy-labels)
-  * [Features](#features)
-  * [How to use](#how-to-use)
-  * [Built-in rules](#built-in-rules)
-  * [Custom Rules](#custom-rules)
-    + [How to add your own rule](#how-to-add-your-own-rule)
-    + [How to make your rule configurable](#how-to-make-your-rule-configurable)
-    + [Add name and description for your rule](#add-name-and-description-for-your-rule)
-    + [Tips for adding custom rules](#tips-for-adding-custom-rules)
-  * [Known limitations](#known-limitations)
-  * [Future Plans](#future-plans)
+  - [Features](#features)
+  - [How to use](#how-to-use)
+  - [Built-in rules](#built-in-rules)
+  - [Custom Rules](#custom-rules)
+    - [How to add your own rule](#how-to-add-your-own-rule)
+    - [How to make your rule configurable](#how-to-make-your-rule-configurable)
+    - [Add name and description for your rule](#add-name-and-description-for-your-rule)
+    - [Tips for adding custom rules](#tips-for-adding-custom-rules)
+  - [Known limitations](#known-limitations)
+  - [Future Plans](#future-plans)
 
 ## Features
 

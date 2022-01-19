@@ -4,5 +4,13 @@
     "description": "Rule based labels for the Unity Editor hierarchy window.",
     "author": "Ruben Ohnmacht",
     "license": "MIT",
-    "displayName": "Hierarchy Labels"
+    "displayName": "Hierarchy Labels",
+    "documentationUrl": "https://github.com/shniqq/hierarchy-labels#readme",
+    "samples": [
+        {
+            "displayName": "Custom Rule Example",
+            "description": "Contains rule to show a label if a Canvas is missing a GraphicalRaycaster as example on how to create a custom rule.",
+            "path": "Samples~/"
+        }
+    ]
 }
