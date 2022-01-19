@@ -1,20 +1,30 @@
 # Hierarchy Labels
 
+![GitHub package.json version](https://img.shields.io/github/package-json/v/shniqq/hierarchy-labels) [![openupm](https://img.shields.io/npm/v/com.shniqq.hierarchy-labels?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.shniqq.auto-dark-mode/) [![Unity](https://img.shields.io/badge/Unity-3D-lightgrey)](https://img.shields.io/badge/Unity-3D-lightgrey)
+
 Custom labels for the Unity Hierarchy window:
 
 ![Example image of hierarchy labels](Documentation~/HierarchyExample.png)
 
-- [Hierarchy Labels](#hierarchy-labels)
-  - [Features](#features)
-  - [How to use](#how-to-use)
-  - [Built-in rules](#built-in-rules)
-  - [Custom Rules](#custom-rules)
-    - [How to add your own rule](#how-to-add-your-own-rule)
-    - [How to make your rule configurable](#how-to-make-your-rule-configurable)
-    - [Add name and description for your rule](#add-name-and-description-for-your-rule)
-    - [Tips for adding custom rules](#tips-for-adding-custom-rules)
-  - [Known limitations](#known-limitations)
-  - [Future Plans](#future-plans)
+- [Installation](#installation)
+- [Features](#features)
+- [How to use](#how-to-use)
+- [Built-in rules](#built-in-rules)
+- [Custom Rules](#custom-rules)
+  - [How to add your own rule](#how-to-add-your-own-rule)
+  - [How to make your rule configurable](#how-to-make-your-rule-configurable)
+  - [Add name and description for your rule](#add-name-and-description-for-your-rule)
+  - [Tips for adding custom rules](#tips-for-adding-custom-rules)
+- [Known limitations](#known-limitations)
+- [Future Plans](#future-plans)
+
+## Installation
+
+Via OpenUPM: `openupm add com.shniqq.hierarchy-labels`
+
+Via PackageManager UI: Go to add package, select `git` and paste `https://github.com/shniqq/hierarchy-labels.git`
+
+Manually: Add `"com.shniqq.hierarchy-labels": "https://github.com/shniqq/hierarchy-labels.git"` to your `manifest.json`
 
 ## Features
 
@@ -47,7 +57,7 @@ Let's say we want to add a rule that adds a label reminding us if a GameObject, 
 
 Add a new class that inherits from `HierarchyLabelRule` (recommended) or implements `IHierarchyLabelRule`.
 
-```c-sharp
+```csharp
 using System;
 using HierarchyLabels;
 using UnityEngine;
@@ -83,7 +93,7 @@ Given the example above, let's say we want to add the option to also include dis
 
 For this, we add a `[SerializedField]` to the class above:
 
-```c-sharp
+```csharp
 using System;
 using HierarchyLabels;
 using UnityEngine;
@@ -126,7 +136,7 @@ The example above now shows the option to include disabled components, and it pr
 
 In the examples above you can see that the names of the rules can get quite long and clutter the UI. To prevent this you can add the `[DisplayName]` and `[Description]` attributes to your rule class. The settings UI will then use the provided name instead and show a description if any is provided.
 
-```c-sharp
+```csharp
 using System;
 using System.ComponentModel;
 using HierarchyLabels;
