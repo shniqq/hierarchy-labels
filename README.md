@@ -18,7 +18,7 @@ Install the package, and head over to `ProjectSettings/Hierarchy Labels`:
 Use the dropdown menu `Select which rule to add:` to select your rule, then click `Add selected Rule`.
 Configure your rule in the list above.
 
-![How to add a rule](Documentation~/RuleAdditionExample.png)
+![How to add a rule](Documentation~/RuleAdditionExample1.png)
 
 ## Built-in rules
 
