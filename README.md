@@ -4,6 +4,18 @@ Custom labels for the Unity Hierarchy window:
 
 ![Example image of hierarchy labels](Documentation~/HierarchyExample.png)
 
+- [Hierarchy Labels](#hierarchy-labels)
+  * [Features](#features)
+  * [How to use](#how-to-use)
+  * [Built-in rules](#built-in-rules)
+  * [Custom Rules](#custom-rules)
+    + [How to add your own rule](#how-to-add-your-own-rule)
+    + [How to make your rule configurable](#how-to-make-your-rule-configurable)
+    + [Add name and description for your rule](#add-name-and-description-for-your-rule)
+    + [Tips for adding custom rules](#tips-for-adding-custom-rules)
+  * [Known limitations](#known-limitations)
+  * [Future Plans](#future-plans)
+
 ## Features
 
 - Display a label (or multiple) for each element in Unity's hierarchy window
@@ -18,7 +30,7 @@ Install the package, and head over to `ProjectSettings/Hierarchy Labels`:
 Use the dropdown menu `Select which rule to add:` to select your rule, then click `Add selected Rule`.
 Configure your rule in the list above.
 
-![How to add a rule](Documentation~/RuleAdditionExample1.png)
+![How to add a rule](Documentation~/RuleAdditionExample.png)
 
 ## Built-in rules
 
@@ -159,11 +171,11 @@ public class CanvasWithoutRaycastHierarchyLabelRule : HierarchyLabelRule
 - If you implement `IHierarchyLabelRule` instead of inheriting from `HierarchyLabelRule`, it is recommended to call `EditorApplication.RepaintHierarchyWindow()` after any settings in your rule have changed, e.g. via the `ISerializationCallbackReceiver.OnBeforeSerialize()` method.
 - Make sure to add the `[Serializable]` attribute to your rule implementation class.
 
-### Known limitations
+## Known limitations
 
 - If your rule is based on some values of a GameObject, i.e. if a component is disabled or not, changing that value on the GameObject will not immediately trigger a redraw of the hierarchy window, and hence your label might not show/hide immediately, except if this dirties the scene.
 - If you rename your class, change it's namespace, or it's assembly is modified, the rule is removed from the list of active rules and has to be re-added (`Missing types referenced` warning in the console). This is a limitation by Unity, and is [possibly addressed in the future]((https://issuetracker.unity3d.com/issues/serializereference-serialized-reference-data-lost-when-the-class-name-is-refactored)).
 
-### Future Plans
+## Future Plans
 
 - Provide better styling options
