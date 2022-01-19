@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Text;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace HierarchyLabels
@@ -12,6 +13,7 @@ namespace HierarchyLabels
         private static void Initialize()
         {
             EditorApplication.hierarchyWindowItemOnGUI += OnDrawHierarchyItem;
+            EditorSceneManager.sceneDirtied += _ => EditorApplication.RepaintHierarchyWindow();
         }
 
         private static void OnDrawHierarchyItem(int instanceID, Rect selectionRect)

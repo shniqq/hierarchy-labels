@@ -104,7 +104,7 @@ namespace HierarchyLabels
             var hierarchyRulesSerializedProperty = _serializedObject.FindProperty(nameof(_hierarchyLabelRules));
             var hierarchyRulesEnumerator = hierarchyRulesSerializedProperty.GetEnumerator();
 
-            if (hierarchyRulesEnumerator.Current == null || hierarchyRulesSerializedProperty.arraySize == 0)
+            if (hierarchyRulesSerializedProperty.arraySize == 0)
             {
                 EditorGUILayout.LabelField("No rules added yet..");
             }
