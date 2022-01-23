@@ -6,31 +6,32 @@ Custom labels for the Unity Hierarchy window:
 
 ![Example image of hierarchy labels](Documentation~/HierarchyExample.png)
 
-- [Installation](#installation)
-- [Features](#features)
-- [How to use](#how-to-use)
-- [Built-in rules](#built-in-rules)
-- [Custom Rules](#custom-rules)
-  - [How to add your own rule](#how-to-add-your-own-rule)
-  - [How to make your rule configurable](#how-to-make-your-rule-configurable)
-  - [Add name and description for your rule](#add-name-and-description-for-your-rule)
-  - [Tips for adding custom rules](#tips-for-adding-custom-rules)
-- [Known limitations](#known-limitations)
-- [Future Plans](#future-plans)
+* [Installation](#installation)
+* [Features](#features)
+* [How to use](#how-to-use)
+* [Built-in rules](#built-in-rules)
+* [Built-in styles](#built-in-styles)
+* [Custom Rules](#custom-rules)
+  * [How to add your own rule](#how-to-add-your-own-rule)
+  * [How to make your rule configurable](#how-to-make-your-rule-configurable)
+  * [Add name and description for your rule](#add-name-and-description-for-your-rule)
+  * [Tips for adding custom rules](#tips-for-adding-custom-rules)
+* [Custom styling](#custom-styling)
+* [Known limitations](#known-limitations)
 
 ## Installation
 
-- Via OpenUPM: ```openupm add com.shniqq.hierarchy-labels```
+* Via OpenUPM: ```openupm add com.shniqq.hierarchy-labels```
 
-- Via PackageManager UI: Go to add package, select `git` and paste ```https://github.com/shniqq/hierarchy-labels.git```
+* Via PackageManager UI: Go to add package, select `git` and paste ```https://github.com/shniqq/hierarchy-labels.git```
 
-- Manually: Add ```"com.shniqq.hierarchy-labels": "https://github.com/shniqq/hierarchy-labels.git"``` to your `manifest.json`
+* Manually: Add ```"com.shniqq.hierarchy-labels": "https://github.com/shniqq/hierarchy-labels.git"``` to your `manifest.json`
 
 ## Features
 
-- Display a label (or multiple) for each GameObject in Unity's hierarchy window
-- Add custom rules for displaying a label
-- Custom label styling per rule
+* Display a label (or multiple) for each GameObject in Unity's hierarchy window
+* Add custom rules for displaying a label
+* Custom label styling per rule
 
 ## How to use
 
@@ -44,15 +45,15 @@ Configure your rule in the list above.
 
 ## Built-in rules
 
-- `DisplayScriptsFromSpecifiedAssemblyHierarchyRule ("Is From Assembly")`: Displays a label if the component script is from the specified assembly.
+* `DisplayScriptsFromSpecifiedAssemblyHierarchyRule ("Is From Assembly")`: Displays a label if the component script is from the specified assembly.
 You can configure if the name of the assembly should be matched fully or just contain the specfied text, i.e. unchecking `Assembly Full Name` will make `TextMeshPro` match any TMPro component, while checking it will not, since the full assembly name is `Unity.TextMeshPro`.
-- `DisplaySpecificComponentTypeHierarchyRule ("Is Type")`:
+* `DisplaySpecificComponentTypeHierarchyRule ("Is Type")`:
 Displays a label if the component script is of the specified type.
 
 ## Built-in styles
 
-- `DefaultLabelStyleProvider ("Default Label Style")`: The default style for a label.
-- `ColorLabelStyleProvider ("Colored Label")`: Select a color in the settings and the label will be displayed in that color.
+* `DefaultLabelStyleProvider ("Default Label Style")`: The default style for a label.
+* `ColorLabelStyleProvider ("Colored Label")`: Select a color in the settings and the label will be displayed in that color.
 
 ## Custom Rules
 
@@ -194,11 +195,11 @@ public class CanvasWithoutRaycastHierarchyLabelRule : HierarchyLabelRule
 
 ### Tips for adding custom rules
 
-- Try to keep expensive method calls like `GetComponent()` to a minimum.
-- Use `ISerializationCallbackReceiver` or `[InitializeOnLoadMethod]`-attributes to do expensive calls instead of in each `GetLabel()` call.
-- If you implement `IHierarchyLabelRule` instead of inheriting from `HierarchyLabelRule`, it is recommended to call `EditorApplication.RepaintHierarchyWindow()` after any settings in your rule have changed, e.g. via the `ISerializationCallbackReceiver.OnBeforeSerialize()` method.
-- If you implement `IHierarchyLabelRule` instead of inheriting from `HierarchyLabelRule`, adding a `[SerializedReference]` field of type `ILabelStyleProvider` to get the styling dropdown menu. Otherwise you can fall back to `DefaultLabelStyleProvider.Style`.
-- Make sure to add the `[Serializable]` attribute to your rule/style implementation class.
+* Try to keep expensive method calls like `GetComponent()` to a minimum.
+* Use `ISerializationCallbackReceiver` or `[InitializeOnLoadMethod]`-attributes to do expensive calls instead of in each `GetLabel()` call.
+* If you implement `IHierarchyLabelRule` instead of inheriting from `HierarchyLabelRule`, it is recommended to call `EditorApplication.RepaintHierarchyWindow()` after any settings in your rule have changed, e.g. via the `ISerializationCallbackReceiver.OnBeforeSerialize()` method.
+* If you implement `IHierarchyLabelRule` instead of inheriting from `HierarchyLabelRule`, adding a `[SerializedReference]` field of type `ILabelStyleProvider` to get the styling dropdown menu. Otherwise you can fall back to `DefaultLabelStyleProvider.Style`.
+* Make sure to add the `[Serializable]` attribute to your rule/style implementation class.
 
 ## Custom styling
 
@@ -235,5 +236,5 @@ public class UniqueColorLabelStyleProvider : ILabelStyleProvider
 
 ## Known limitations
 
-- If your rule is based on some values of a GameObject, i.e. if a component is disabled or not, changing that value on the GameObject will not immediately trigger a redraw of the hierarchy window, and hence your label might not show/hide immediately, except if this dirties the scene.
-- If you rename your class, change it's namespace, or it's assembly is modified, the rule is removed from the list of active rules and has to be re-added (`Missing types referenced` warning in the console). This is a limitation by Unity, and is [possibly addressed in the future](https://issuetracker.unity3d.com/issues/serializereference-serialized-reference-data-lost-when-the-class-name-is-refactored). One way around this issue is adding the [`[MovedFromAttribute]`](https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Scripting/APIUpdating/UpdatedFromAttribute.cs) to the class that was changed.
+* If your rule is based on some values of a GameObject, i.e. if a component is disabled or not, changing that value on the GameObject will not immediately trigger a redraw of the hierarchy window, and hence your label might not show/hide immediately, except if this dirties the scene.
+* If you rename your class, change it's namespace, or it's assembly is modified, the rule is removed from the list of active rules and has to be re-added (`Missing types referenced` warning in the console). This is a limitation by Unity, and is [possibly addressed in the future](https://issuetracker.unity3d.com/issues/serializereference-serialized-reference-data-lost-when-the-class-name-is-refactored). One way around this issue is adding the [`[MovedFromAttribute]`](https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Scripting/APIUpdating/UpdatedFromAttribute.cs) to the class that was changed.
