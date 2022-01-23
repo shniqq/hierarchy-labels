@@ -1,6 +1,6 @@
 # Hierarchy Labels
 
-![GitHub package.json version](https://img.shields.io/github/package-json/v/shniqq/hierarchy-labels) [![openupm](https://img.shields.io/npm/v/com.shniqq.hierarchy-labels?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.shniqq.auto-dark-mode/) [![Unity](https://img.shields.io/badge/Unity-3D-lightgrey)](https://img.shields.io/badge/Unity-3D-lightgrey)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/shniqq/hierarchy-labels) [![openupm](https://img.shields.io/npm/v/com.shniqq.hierarchy-labels?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.shniqq.hierarchy-labels/) [![Unity](https://img.shields.io/badge/Unity-3D-lightgrey)](https://img.shields.io/badge/Unity-3D-lightgrey)
 
 Custom labels for the Unity Hierarchy window:
 
@@ -20,11 +20,11 @@ Custom labels for the Unity Hierarchy window:
 
 ## Installation
 
-Via OpenUPM: `openupm add com.shniqq.hierarchy-labels`
+- Via OpenUPM: ```openupm add com.shniqq.hierarchy-labels```
 
-Via PackageManager UI: Go to add package, select `git` and paste `https://github.com/shniqq/hierarchy-labels.git`
+- Via PackageManager UI: Go to add package, select `git` and paste ```https://github.com/shniqq/hierarchy-labels.git```
 
-Manually: Add `"com.shniqq.hierarchy-labels": "https://github.com/shniqq/hierarchy-labels.git"` to your `manifest.json`
+- Manually: Add ```"com.shniqq.hierarchy-labels": "https://github.com/shniqq/hierarchy-labels.git"``` to your `manifest.json`
 
 ## Features
 
@@ -184,7 +184,7 @@ public class CanvasWithoutRaycastHierarchyLabelRule : HierarchyLabelRule
 ## Known limitations
 
 - If your rule is based on some values of a GameObject, i.e. if a component is disabled or not, changing that value on the GameObject will not immediately trigger a redraw of the hierarchy window, and hence your label might not show/hide immediately, except if this dirties the scene.
-- If you rename your class, change it's namespace, or it's assembly is modified, the rule is removed from the list of active rules and has to be re-added (`Missing types referenced` warning in the console). This is a limitation by Unity, and is [possibly addressed in the future]((https://issuetracker.unity3d.com/issues/serializereference-serialized-reference-data-lost-when-the-class-name-is-refactored)).
+- If you rename your class, change it's namespace, or it's assembly is modified, the rule is removed from the list of active rules and has to be re-added (`Missing types referenced` warning in the console). This is a limitation by Unity, and is [possibly addressed in the future](https://issuetracker.unity3d.com/issues/serializereference-serialized-reference-data-lost-when-the-class-name-is-refactored). One way around this issue is adding the [`[MovedFromAttribute]`](https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Scripting/APIUpdating/UpdatedFromAttribute.cs) to the class that was changed.
 
 ## Future Plans
 
