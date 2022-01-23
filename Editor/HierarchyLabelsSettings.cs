@@ -147,6 +147,8 @@ namespace HierarchyLabels
                     if (childSerializedProperty.propertyType == SerializedPropertyType.ManagedReference
                         && childSerializedProperty.managedReferenceFieldTypename.Contains(fullName))
                     {
+                        childSerializedProperty.managedReferenceValue ??= new DefaultLabelStyleProvider();
+
                         var currentStyle =
                             _availableStyles.FirstOrDefault(e =>
                                 e.Item1 == childSerializedProperty.managedReferenceValue.GetType());
@@ -161,7 +163,6 @@ namespace HierarchyLabels
                         }
                     }
                     else
-
                     {
                         EditorGUILayout.PropertyField(childSerializedProperty, true);
                     }
@@ -188,7 +189,7 @@ namespace HierarchyLabels
             if (instance._foldoutRules)
             {
                 instance._selectedRuleIndex = EditorGUILayout.Popup(new GUIContent("Select which rule to add:"),
-                    instance._selectedRuleIndex,
+                    Math.Min(instance._selectedRuleIndex, _availableRules.Count - 1),
                     _availableRules.Keys.ToArray());
 
                 var selectedRule = _availableRules.ElementAt(instance._selectedRuleIndex);
