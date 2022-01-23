@@ -1,4 +1,5 @@
 using System;
+using HierarchyLabels.BuiltInStyles;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,7 +8,10 @@ namespace HierarchyLabels
     [Serializable]
     public abstract class HierarchyLabelRule : IHierarchyLabelRule, ISerializationCallbackReceiver
     {
-        public abstract bool GetLabel(Component component, out string label);
+        [SerializeReference] private ILabelStyleProvider _styleProviderProvider = new DefaultLabelStyleProvider();
+        protected ILabelStyleProvider StyleProvider => _styleProviderProvider;
+
+        public abstract bool GetLabel(Component component, out string label, out GUIStyle style);
 
         public virtual void OnBeforeSerialize()
         {

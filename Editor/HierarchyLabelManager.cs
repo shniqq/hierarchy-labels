@@ -1,6 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using HierarchyLabels.BuiltInStyles;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -27,27 +28,43 @@ namespace HierarchyLabels
 
             if (gameObject != null)
             {
-                selectionRect.x += HierarchyLabelsSettings.instance.StyleProvider.GetStyle().CalcSize(new GUIContent(gameObject.name)).x +
+                selectionRect.x += EditorStyles.label.CalcSize(new GUIContent(gameObject.name)).x +
                                    HierarchyLabelsSettings.instance.Alignment.x;
                 selectionRect.y += HierarchyLabelsSettings.instance.Alignment.y;
 
-                ApplyLabel(selectionRect, GetLabel(gameObject));
+                ApplyLabels(selectionRect, GetLabels(gameObject));
             }
         }
 
-        private static void ApplyLabel(Rect selectionRect, string label)
+        private static void ApplyLabels(Rect selectionRect, List<Tuple<string, GUIStyle>> labels)
         {
-            if (string.IsNullOrEmpty(label))
+            if (!labels.Any())
             {
                 return;
             }
 
-            var labelStyle = HierarchyLabelsSettings.instance.StyleProvider.GetStyle();
+            var isFirst = true;
+            foreach (var (label, style) in labels)
+            {
+                if (!isFirst)
+                {
+                    DrawLabelWithStyle(ref selectionRect, DefaultLabelStyleProvider.Style,
+                        HierarchyLabelsSettings.instance.Separator);
+                }
+
+                DrawLabelWithStyle(ref selectionRect, style, label);
+                isFirst = false;
+            }
+        }
+
+        private static void DrawLabelWithStyle(ref Rect selectionRect, GUIStyle style, string label)
+        {
+            var labelStyle = new GUIStyle(style);
             labelStyle.fontSize =
                 Convert.ToInt32(labelStyle.fontSize * HierarchyLabelsSettings.instance.FontSizeFactory);
             var size = labelStyle.CalcSize(new GUIContent(label));
 
-            selectionRect.y = selectionRect.y + (selectionRect.height - size.y)/2f;
+            selectionRect.y += (selectionRect.height - size.y) / 2f;
             selectionRect.width = size.x;
             selectionRect.height = size.y;
 
@@ -55,28 +72,30 @@ namespace HierarchyLabels
             selectionRect.x += size.x;
         }
 
-        private static string GetLabel(GameObject gameObject)
+        private static List<Tuple<string, GUIStyle>> GetLabels(GameObject gameObject)
         {
-            var label = new StringBuilder();
+            var list = new List<Tuple<string, GUIStyle>>();
+            if (HierarchyLabelsSettings.instance.HierarchyLabelRules == null)
+            {
+                return list;
+            }
 
             foreach (var component in gameObject.GetComponents<Component>())
             {
-                var componentLabel = string.Empty;
-                if (HierarchyLabelsSettings.instance.HierarchyLabelRules != null &&
-                    HierarchyLabelsSettings.instance.HierarchyLabelRules
-                        .Where(e => e != null)
-                        .Any(rule => rule.GetLabel(component, out componentLabel)))
+                var applicableRules = HierarchyLabelsSettings.instance.HierarchyLabelRules
+                    .Where(e => e != null)
+                    .Select(rule => rule.GetLabel(component, out var componentLabel, out var style)
+                        ? new Tuple<string, GUIStyle>(componentLabel, style)
+                        : null)
+                    .Where(e => e is not null)
+                    .ToList();
+                if (applicableRules.Any())
                 {
-                    if (label.Length > 0)
-                    {
-                        label.Append(HierarchyLabelsSettings.instance.Separator);
-                    }
-
-                    label.Append(componentLabel);
+                    list.AddRange(applicableRules);
                 }
             }
 
-            return label.ToString();
+            return list;
         }
     }
 }

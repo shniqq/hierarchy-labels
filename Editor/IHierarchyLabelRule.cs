@@ -4,6 +4,6 @@ namespace HierarchyLabels
 {
     public interface IHierarchyLabelRule
     {
-        bool GetLabel(Component component, out string label);
+        bool GetLabel(Component component, out string label, out GUIStyle style);
     }
 }

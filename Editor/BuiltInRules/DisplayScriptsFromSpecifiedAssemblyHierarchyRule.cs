@@ -17,8 +17,9 @@ namespace HierarchyLabels.BuiltInRules
         [SerializeField] public string AssemblyName;
         [SerializeField] private bool _assemblyFullName;
 
-        public override bool GetLabel(Component component, out string label)
+        public override bool GetLabel(Component component, out string label, out GUIStyle style)
         {
+            style = StyleProvider.GetStyle(component);
             if (_types.ContainsKey(component.GetType()))
             {
                 label = component.GetType().Name;

@@ -4,6 +4,6 @@ namespace HierarchyLabels
 {
     public interface ILabelStyleProvider
     {
-        GUIStyle GetStyle();
+        GUIStyle GetStyle(Component component);
     }
 }
