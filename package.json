@@ -8,8 +8,8 @@
     "documentationUrl": "https://github.com/shniqq/hierarchy-labels#readme",
     "samples": [
         {
-            "displayName": "Custom Rule Example",
-            "description": "Contains rule to show a label if a Canvas is missing a GraphicalRaycaster as example on how to create a custom rule.",
+            "displayName": "Custom Rule & Styling Examples",
+            "description": "Contains rule to show a label if a Canvas is missing a GraphicalRaycaster as example on how to create a custom rule as well as a custom styling provider to color each component instance uniquely.",
             "path": "Samples~/"
         }
     ]
