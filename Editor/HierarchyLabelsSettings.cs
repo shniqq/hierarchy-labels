@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using HierarchyLabels.Utils;
 using UnityEditor;
 using UnityEngine;
 
@@ -84,11 +85,12 @@ namespace HierarchyLabels
             EditorGUILayout.Separator();
 
             EditorGUILayout.LabelField("Hierarchy Label Rules:", EditorStyles.boldLabel);
-            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-            DrawActiveRules();
-            EditorGUILayout.Separator();
-            DrawRulesAdditionUI();
-            EditorGUILayout.EndVertical();
+            using (new VerticalLayoutBlock(EditorStyles.helpBox))
+            {
+                DrawActiveRules();
+                EditorGUILayout.Separator();
+                DrawRulesAdditionUI();
+            }
 
             instance.Sanitize();
 
@@ -116,78 +118,81 @@ namespace HierarchyLabels
             var index = 0;
             while (hierarchyRulesEnumerator.MoveNext() && hierarchyRulesEnumerator.Current != null)
             {
-                EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
-                EditorGUILayout.BeginVertical();
-                var currentHierarchyLabelRule = (SerializedProperty)hierarchyRulesEnumerator.Current;
-
-                if (currentHierarchyLabelRule.managedReferenceValue == null)
+                using (new HorizontalLayoutBlock(EditorStyles.helpBox))
                 {
-                    hierarchyRulesSerializedProperty.DeleteArrayElementAtIndex(index);
-                    EditorGUILayout.EndVertical();
-                    EditorGUILayout.EndHorizontal();
-                    break;
-                }
-
-                var hierarchyRuleType = currentHierarchyLabelRule.managedReferenceValue.GetType();
-                var displayName = hierarchyRuleType
-                    .GetCustomAttribute<DisplayNameAttribute>() is { } displayNameAttribute
-                    ? displayNameAttribute.DisplayName
-                    : hierarchyRuleType.Name;
-                EditorGUILayout.LabelField($"Name: {displayName}");
-
-                var hierarchyRuleChildrenEnumerator = currentHierarchyLabelRule.GetEnumerator();
-                while (hierarchyRuleChildrenEnumerator.MoveNext())
-                {
-                    if (hierarchyRuleChildrenEnumerator.Current is not SerializedProperty childSerializedProperty)
+                    using (new VerticalLayoutBlock())
                     {
-                        continue;
-                    }
+                        var currentHierarchyLabelRule = (SerializedProperty)hierarchyRulesEnumerator.Current;
 
-                    var fullName = typeof(ILabelStyleProvider).FullName ?? nameof(ILabelStyleProvider);
-                    if (childSerializedProperty.propertyType == SerializedPropertyType.ManagedReference
-                        && childSerializedProperty.managedReferenceFieldTypename.Contains(fullName))
-                    {
-                        childSerializedProperty.managedReferenceValue ??= new DefaultLabelStyleProvider();
-
-                        var currentStyle =
-                            _availableStyles.FirstOrDefault(e =>
-                                e.Item1 == childSerializedProperty.managedReferenceValue.GetType());
-                        var styleIndex = currentStyle != null ? _availableStyles.IndexOf(currentStyle) : 0;
-                        var newStyleIndex = EditorGUILayout.Popup(new GUIContent("Style:"),
-                            styleIndex,
-                            _availableStyles.Select(e => e.Item2).ToArray());
-                        if (newStyleIndex != styleIndex)
+                        if (currentHierarchyLabelRule.managedReferenceValue == null)
                         {
-                            childSerializedProperty.managedReferenceValue =
-                                Activator.CreateInstance(_availableStyles[newStyleIndex].Item1);
+                            hierarchyRulesSerializedProperty.DeleteArrayElementAtIndex(index);
+                            EditorGUILayout.EndVertical();
+                            break;
+                        }
+
+                        var hierarchyRuleType = currentHierarchyLabelRule.managedReferenceValue.GetType();
+                        var displayName = hierarchyRuleType
+                            .GetCustomAttribute<DisplayNameAttribute>() is { } displayNameAttribute
+                            ? displayNameAttribute.DisplayName
+                            : hierarchyRuleType.Name;
+                        EditorGUILayout.LabelField($"Name: {displayName}");
+
+                        var hierarchyRuleChildrenEnumerator = currentHierarchyLabelRule.GetEnumerator();
+                        while (hierarchyRuleChildrenEnumerator.MoveNext())
+                        {
+                            if (hierarchyRuleChildrenEnumerator.Current is not SerializedProperty
+                                childSerializedProperty)
+                            {
+                                continue;
+                            }
+
+                            var fullName = typeof(ILabelStyleProvider).FullName ?? nameof(ILabelStyleProvider);
+                            if (childSerializedProperty.propertyType == SerializedPropertyType.ManagedReference
+                                && childSerializedProperty.managedReferenceFieldTypename.Contains(fullName))
+                            {
+                                childSerializedProperty.managedReferenceValue ??= new DefaultLabelStyleProvider();
+
+                                var currentStyle =
+                                    _availableStyles.FirstOrDefault(e =>
+                                        e.Item1 == childSerializedProperty.managedReferenceValue.GetType());
+                                var styleIndex = currentStyle != null ? _availableStyles.IndexOf(currentStyle) : 0;
+                                var newStyleIndex = EditorGUILayout.Popup(new GUIContent("Style:"),
+                                    styleIndex,
+                                    _availableStyles.Select(e => e.Item2).ToArray());
+                                if (newStyleIndex != styleIndex)
+                                {
+                                    childSerializedProperty.managedReferenceValue =
+                                        Activator.CreateInstance(_availableStyles[newStyleIndex].Item1);
+                                }
+                            }
+                            else
+                            {
+                                EditorGUILayout.PropertyField(childSerializedProperty, true);
+                            }
                         }
                     }
-                    else
+
+                    if (GUILayout.Button("Remove"))
                     {
-                        EditorGUILayout.PropertyField(childSerializedProperty, true);
+                        hierarchyRulesSerializedProperty.DeleteArrayElementAtIndex(index);
+                        break;
                     }
                 }
 
-                EditorGUILayout.EndVertical();
-
-                if (GUILayout.Button("Remove"))
-                {
-                    hierarchyRulesSerializedProperty.DeleteArrayElementAtIndex(index);
-                    EditorGUILayout.EndHorizontal();
-                    break;
-                }
-
-                EditorGUILayout.EndHorizontal();
                 index++;
             }
         }
 
         private static void DrawRulesAdditionUI()
         {
-            instance._foldoutRules =
-                EditorGUILayout.BeginFoldoutHeaderGroup(instance._foldoutRules, "Available Label Rules:");
-            if (instance._foldoutRules)
+            using (new FoldoutHeaderGroupBlock(ref instance._foldoutRules, "Available Label Rules:"))
             {
+                if (!instance._foldoutRules)
+                {
+                    return;
+                }
+
                 instance._selectedRuleIndex = EditorGUILayout.Popup(new GUIContent("Select which rule to add:"),
                     Math.Min(instance._selectedRuleIndex, _availableRules.Count - 1),
                     _availableRules.Keys.ToArray());
@@ -199,19 +204,18 @@ namespace HierarchyLabels
                     EditorGUILayout.LabelField(descriptionAttribute.Description, EditorStyles.wordWrappedLabel);
                 }
 
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.FlexibleSpace();
-                if (GUILayout.Button("Add selected Rule"))
+                using (new HorizontalLayoutBlock())
                 {
-                    var newInstance = Activator.CreateInstance(selectedRule.Value);
-                    instance._hierarchyLabelRules.Add(newInstance as IHierarchyLabelRule);
+                    GUILayout.FlexibleSpace();
+                    if (GUILayout.Button("Add selected Rule"))
+                    {
+                        var newInstance = Activator.CreateInstance(selectedRule.Value);
+                        instance._hierarchyLabelRules.Add(newInstance as IHierarchyLabelRule);
+                    }
+
+                    GUILayout.FlexibleSpace();
                 }
-
-                GUILayout.FlexibleSpace();
-                EditorGUILayout.EndHorizontal();
             }
-
-            EditorGUILayout.EndFoldoutHeaderGroup();
         }
 
         private void Sanitize()
