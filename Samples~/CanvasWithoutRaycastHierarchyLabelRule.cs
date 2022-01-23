@@ -7,13 +7,14 @@ using Component = UnityEngine.Component;
 
 [Serializable,
 DisplayName("Missing Raycaster on Canvas"),
-Description("Shows a label if a Canvas is attached but no GraphicalRaycaster is present or it is disabled.")]
+Description("Shows a label if a Canvas is attached but no GraphicRaycaster is present or it is disabled.")]
 public class CanvasWithoutRaycastHierarchyLabelRule : HierarchyLabelRule
 {
     [SerializeField] private bool _includeDisabled;
 
-    public override bool GetLabel(Component component, out string label)
+    public override bool GetLabel(Component component, out string label, out GUIStyle style)
     {
+        style = StyleProvider.GetStyle(component);
         label = string.Empty;
 
         if (component is Canvas && IsRaycastDisabledOrMissing(component))

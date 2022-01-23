@@ -1,18 +1,25 @@
 using System;
+using System.ComponentModel;
 using UnityEditor;
 using UnityEngine;
+using Component = UnityEngine.Component;
 
 namespace HierarchyLabels
 {
-    [Serializable]
+    [Serializable, DisplayName("Colored Label")]
     public class ColorLabelStyleProvider : ILabelStyleProvider, ISerializationCallbackReceiver
     {
         [SerializeField] private Color _color = Color.black;
 
-        public GUIStyle GetStyle()
+        public GUIStyle GetStyle(Component component)
         {
-            var style = new DefaultLabelStyleProvider().GetStyle();
-            style.normal.textColor = _color;
+            var style = new GUIStyle(DefaultLabelStyleProvider.Style)
+            {
+                normal =
+                {
+                    textColor = _color
+                }
+            };
             return style;
         }
 

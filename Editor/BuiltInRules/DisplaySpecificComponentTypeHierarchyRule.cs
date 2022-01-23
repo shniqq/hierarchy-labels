@@ -10,8 +10,9 @@ namespace HierarchyLabels.BuiltInRules
     {
         [SerializeField] private string _typeName;
 
-        public override bool GetLabel(Component component, out string label)
+        public override bool GetLabel(Component component, out string label, out GUIStyle style)
         {
+            style = StyleProvider.GetStyle(component);
             if (component.GetType().Name == _typeName)
             {
                 label = _typeName;

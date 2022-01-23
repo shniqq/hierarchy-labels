@@ -25,7 +25,6 @@ namespace HierarchyLabels
 
         public Vector2 Alignment => _labelAlignment;
         public float FontSizeFactory => _fontSizeFactor;
-        public ILabelStyleProvider StyleProvider => _labelStyleProvider;
         public string Separator => _separator;
         public IHierarchyLabelRule[] HierarchyLabelRules => _hierarchyLabelRules.ToArray();
 
@@ -34,13 +33,12 @@ namespace HierarchyLabels
         [SerializeField, Range(0, 1)] private float _fontSizeFactor = 0.8f;
         [SerializeField] private string _separator = "|";
         [SerializeReference] private List<IHierarchyLabelRule> _hierarchyLabelRules = new();
-        [SerializeReference] private ILabelStyleProvider _labelStyleProvider;
 
-        [SerializeField] private bool _foldoutStyling;
         [SerializeField] private bool _foldoutRules;
         [SerializeField] private int _selectedRuleIndex;
 
         private static Dictionary<string, Type> _availableRules;
+        private static List<Tuple<Type, string>> _availableStyles;
         private static SerializedObject _serializedObject;
 
         [MenuItem("Tools/Toggle Hierarchy Labels")]
@@ -50,7 +48,7 @@ namespace HierarchyLabels
         }
 
         [InitializeOnLoadMethod]
-        private static void GetOrCreateEditor()
+        private static void Initialize()
         {
             _availableRules = TypeCache.GetTypesDerivedFrom<IHierarchyLabelRule>()
                 .Where(e => e.IsClass)
@@ -61,6 +59,15 @@ namespace HierarchyLabels
                         ? displayNameAttribute.DisplayName
                         : e.Name,
                     e => e);
+
+            _availableStyles = TypeCache.GetTypesDerivedFrom<ILabelStyleProvider>()
+                .Where(e => e.IsClass && !e.IsAbstract)
+                .Select(e => new Tuple<Type, string>(
+                    e, e.GetCustomAttribute<DisplayNameAttribute>(false)
+                        is { } displayNameAttribute
+                        ? displayNameAttribute.DisplayName
+                        : e.Name))
+                .ToList();
         }
 
         public static void DrawSettings()
@@ -83,16 +90,13 @@ namespace HierarchyLabels
             DrawRulesAdditionUI();
             EditorGUILayout.EndVertical();
 
-            EditorGUILayout.Separator();
-
-            DrawStylingUI();
-
             instance.Sanitize();
-            
+
             if (_serializedObject.hasModifiedProperties)
             {
                 _serializedObject.ApplyModifiedProperties();
             }
+
             if (EditorGUI.EndChangeCheck())
             {
                 instance.Save(true);
@@ -119,9 +123,11 @@ namespace HierarchyLabels
                 if (currentHierarchyLabelRule.managedReferenceValue == null)
                 {
                     hierarchyRulesSerializedProperty.DeleteArrayElementAtIndex(index);
+                    EditorGUILayout.EndVertical();
+                    EditorGUILayout.EndHorizontal();
                     break;
                 }
-                
+
                 var hierarchyRuleType = currentHierarchyLabelRule.managedReferenceValue.GetType();
                 var displayName = hierarchyRuleType
                     .GetCustomAttribute<DisplayNameAttribute>() is { } displayNameAttribute
@@ -132,7 +138,33 @@ namespace HierarchyLabels
                 var hierarchyRuleChildrenEnumerator = currentHierarchyLabelRule.GetEnumerator();
                 while (hierarchyRuleChildrenEnumerator.MoveNext())
                 {
-                    EditorGUILayout.PropertyField((SerializedProperty)hierarchyRuleChildrenEnumerator.Current, true);
+                    if (hierarchyRuleChildrenEnumerator.Current is not SerializedProperty childSerializedProperty)
+                    {
+                        continue;
+                    }
+
+                    var fullName = typeof(ILabelStyleProvider).FullName ?? nameof(ILabelStyleProvider);
+                    if (childSerializedProperty.propertyType == SerializedPropertyType.ManagedReference
+                        && childSerializedProperty.managedReferenceFieldTypename.Contains(fullName))
+                    {
+                        var currentStyle =
+                            _availableStyles.FirstOrDefault(e =>
+                                e.Item1 == childSerializedProperty.managedReferenceValue.GetType());
+                        var styleIndex = currentStyle != null ? _availableStyles.IndexOf(currentStyle) : 0;
+                        var newStyleIndex = EditorGUILayout.Popup(new GUIContent("Style:"),
+                            styleIndex,
+                            _availableStyles.Select(e => e.Item2).ToArray());
+                        if (newStyleIndex != styleIndex)
+                        {
+                            childSerializedProperty.managedReferenceValue =
+                                Activator.CreateInstance(_availableStyles[newStyleIndex].Item1);
+                        }
+                    }
+                    else
+
+                    {
+                        EditorGUILayout.PropertyField(childSerializedProperty, true);
+                    }
                 }
 
                 EditorGUILayout.EndVertical();
@@ -140,6 +172,7 @@ namespace HierarchyLabels
                 if (GUILayout.Button("Remove"))
                 {
                     hierarchyRulesSerializedProperty.DeleteArrayElementAtIndex(index);
+                    EditorGUILayout.EndHorizontal();
                     break;
                 }
 
@@ -150,7 +183,8 @@ namespace HierarchyLabels
 
         private static void DrawRulesAdditionUI()
         {
-            instance._foldoutRules = EditorGUILayout.BeginFoldoutHeaderGroup(instance._foldoutRules, "Label Rules:");
+            instance._foldoutRules =
+                EditorGUILayout.BeginFoldoutHeaderGroup(instance._foldoutRules, "Available Label Rules:");
             if (instance._foldoutRules)
             {
                 instance._selectedRuleIndex = EditorGUILayout.Popup(new GUIContent("Select which rule to add:"),
@@ -174,29 +208,6 @@ namespace HierarchyLabels
 
                 GUILayout.FlexibleSpace();
                 EditorGUILayout.EndHorizontal();
-            }
-
-            EditorGUILayout.EndFoldoutHeaderGroup();
-        }
-
-        private static void DrawStylingUI()
-        {
-            var labelStyleProvider = _serializedObject.FindProperty(nameof(_labelStyleProvider));
-            EditorGUILayout.PropertyField(labelStyleProvider, true);
-            
-            instance._foldoutStyling = EditorGUILayout.BeginFoldoutHeaderGroup(instance._foldoutStyling, "Styling:");
-            if (instance._foldoutStyling)
-            {
-                foreach (var type in TypeCache.GetTypesDerivedFrom<ILabelStyleProvider>()
-                             .Where(e => e.IsClass)
-                             .Where(e => !e.IsAbstract))
-                {
-                    if (GUILayout.Button($"Use {type.Name}"))
-                    {
-                        var newInstance = Activator.CreateInstance(type);
-                        instance._labelStyleProvider = newInstance as ILabelStyleProvider;
-                    }
-                }
             }
 
             EditorGUILayout.EndFoldoutHeaderGroup();
