@@ -49,6 +49,11 @@ You can configure if the name of the assembly should be matched fully or just co
 - `DisplaySpecificComponentTypeHierarchyRule ("Is Type")`:
 Displays a label if the component script is of the specified type.
 
+## Built-in styles
+
+- `DefaultLabelStyleProvider ("Default Label Style")`: The default style for a label.
+- `ColorLabelStyleProvider ("Colored Label")`: Select a color in the settings and the label will be displayed in that color.
+
 ## Custom Rules
 
 ### How to add your own rule

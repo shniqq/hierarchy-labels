@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using Component = UnityEngine.Component;
 
-namespace HierarchyLabels
+namespace HierarchyLabels.BuiltInStyles
 {
     [Serializable, DisplayName("Default Label Style")]
     public class DefaultLabelStyleProvider : ILabelStyleProvider
