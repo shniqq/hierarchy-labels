@@ -1,16 +1,18 @@
 {
-    "name": "com.shniqq.hierarchy-labels",
-    "version": "1.0.0-preview.2",
-    "description": "Rule based labels for the Unity Editor hierarchy window.",
-    "author": "Ruben Ohnmacht",
-    "license": "MIT",
-    "displayName": "Hierarchy Labels",
-    "documentationUrl": "https://github.com/shniqq/hierarchy-labels#readme",
-    "samples": [
-        {
-            "displayName": "Custom Rule & Styling Examples",
-            "description": "Contains rule to show a label if a Canvas is missing a GraphicalRaycaster as example on how to create a custom rule as well as a custom styling provider to color each component instance uniquely.",
-            "path": "Samples~/"
-        }
-    ]
+  "name": "com.shniqq.hierarchy-labels",
+  "version": "1.0.0",
+  "description": "Rule based labels for the Unity Editor hierarchy window.",
+  "author": "Ruben Ohnmacht",
+  "license": "MIT",
+  "licensesUrl": "https://github.com/shniqq/hierarchy-labels/blob/main/LICENSE.md",
+  "displayName": "Hierarchy Labels",
+  "documentationUrl": "https://github.com/shniqq/hierarchy-labels#readme",
+  "samples": [
+    {
+      "displayName": "Custom Rule & Styling Examples",
+      "description": "Contains rule to show a label if a Canvas is missing a GraphicalRaycaster as example on how to create a custom rule as well as a custom styling provider to color each component instance uniquely.",
+      "path": "Samples~/"
+    }
+  ],
+  "keywords": ["hierarchy", "editor", "custom", "label", "labels"]
 }
