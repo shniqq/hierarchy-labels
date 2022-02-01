@@ -8,7 +8,8 @@ using Component = UnityEngine.Component;
 
 namespace HierarchyLabels.BuiltInRules
 {
-    [Serializable, DisplayName("Is From Assembly"),
+    [Serializable,
+     DisplayName("Is From Assembly"),
      Description("Displays a label if the component script is from the specified assembly.")]
     internal class DisplayScriptsFromSpecifiedAssemblyHierarchyRule : HierarchyLabelRule
     {

@@ -5,7 +5,9 @@ using Component = UnityEngine.Component;
 
 namespace HierarchyLabels.BuiltInRules
 {
-    [Serializable, DisplayName("Is Type"), Description("Displays a label if the component script is of the specified type.")]
+    [Serializable,
+     DisplayName("Is Type"),
+     Description("Displays a label if the component script is of the specified type.")]
     internal class DisplaySpecificComponentTypeHierarchyRule : HierarchyLabelRule
     {
         [SerializeField] private string _typeName;
