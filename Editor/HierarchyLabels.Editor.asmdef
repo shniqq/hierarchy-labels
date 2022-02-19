@@ -1,5 +1,5 @@
 {
-    "name": "HierarchyLabels.Runtime",
+    "name": "HierarchyLabels.Editor",
     "rootNamespace": "HierarchyLabels",
     "references": [],
     "includePlatforms": [

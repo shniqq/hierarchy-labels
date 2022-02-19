@@ -82,6 +82,10 @@ namespace HierarchyLabels
 
             foreach (var component in gameObject.GetComponents<Component>())
             {
+                if (component is null)
+                {
+                    continue;
+                }
                 var applicableRules = HierarchyLabelsSettings.instance.HierarchyLabelRules
                     .Where(e => e != null)
                     .Select(rule => rule.GetLabel(component, out var componentLabel, out var style)

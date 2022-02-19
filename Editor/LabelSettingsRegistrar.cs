@@ -8,7 +8,7 @@ namespace HierarchyLabels
         private static readonly string SettingsPath = $"Project/{Constants.Name}";
         
         [SettingsProvider]
-        public static SettingsProvider CreateAutoDarkModeSettingsProvider()
+        public static SettingsProvider SettingsProvider()
         {
             var provider = new SettingsProvider(SettingsPath, SettingsScope.Project)
             {
@@ -20,11 +20,6 @@ namespace HierarchyLabels
             };
 
             return provider;
-        }
-
-        public static void Open()
-        {
-            SettingsService.OpenUserPreferences(SettingsPath);
         }
     }
 }
