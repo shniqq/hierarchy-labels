@@ -1,6 +1,6 @@
 {
   "name": "com.shniqq.hierarchy-labels",
-  "version": "1.0.1-preview.1",
+  "version": "1.0.1-preview.2",
   "description": "Rule based labels for the Unity Editor hierarchy window.",
   "author": "Ruben Ohnmacht",
   "license": "MIT",
